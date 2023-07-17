@@ -24,7 +24,7 @@ const LoginScreen = () => {
           },
         })
         if (data) {
-          router.push('/admin/finances')
+          router.push('/admin/dashboard')
         }
       }}
     >
