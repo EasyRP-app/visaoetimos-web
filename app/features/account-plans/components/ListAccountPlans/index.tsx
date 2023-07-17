@@ -41,11 +41,12 @@ const ListAccountPlan: React.FC = () => {
   }
 
   const { data, loading, fetchMore } = useGetAccountPlansQuery({
-    variables: { name: `%${search}%` ?? `%%` },
+    variables: { name: `%${search}%` ?? `%%`, limit: 10 },
   })
   const loadMore = async () => {
     const variables = {
       offset: data?.accountPlans?.nodes.length,
+      limit: 10,
       namOrEmail: `%${search}%` ?? `%%`,
     }
 
@@ -62,6 +63,7 @@ const ListAccountPlan: React.FC = () => {
                 ...previousResult.accountPlans.nodes,
                 ...fetchMoreResult.accountPlans.nodes,
               ],
+              pageInfo: fetchMoreResult.accountPlans.pageInfo,
             },
           }
         },
@@ -221,12 +223,14 @@ const ListAccountPlan: React.FC = () => {
         })}
       </InfiniteScroll>
       <PlusButton onOpen={onOpen} setEdit={setIsEditform} />
-      <AccountPlansDrawer
-        intitialValues={initialValues}
-        isEditForm={isEditForm}
-        isOpen={isOpen}
-        onClose={onClose}
-      ></AccountPlansDrawer>
+      {isOpen && (
+        <AccountPlansDrawer
+          intitialValues={initialValues}
+          isEditForm={isEditForm}
+          isOpen={isOpen}
+          onClose={onClose}
+        />
+      )}
     </>
   )
 }

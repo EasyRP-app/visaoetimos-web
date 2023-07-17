@@ -1,7 +1,8 @@
-query getAccountPlans($name: String, $offset: Int) {
+query getAccountPlans($name: String, $limit: Int = 9999,  $offset: Int) {
   accountPlans(
     filter: { or: [{ name: { iLike: $name } }] }
-    paging: { limit: 10, offset: $offset }
+    paging: { limit: $limit, offset: $offset }
+    sorting: {field: name, direction: ASC}
   ) {
     nodes {
       id

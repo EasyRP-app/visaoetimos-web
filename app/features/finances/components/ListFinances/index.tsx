@@ -59,7 +59,7 @@ const ListFinances: React.FC = () => {
   }
 
   const { data, loading, fetchMore } = useGetFinancesQuery({
-    variables: { nameOrEmail: `%${search}%` ?? `%%` },
+    variables: { nameOrEmail: `%${search}%` ?? `%%`, limit: 10 },
   })
 
   const toast = useToast()
@@ -67,6 +67,7 @@ const ListFinances: React.FC = () => {
   const loadMore = async () => {
     const variables = {
       offset: data?.finances?.nodes.length,
+      limit: 10,
       nameOrEmail: `%${search}%` ?? `%%`,
     }
     try {
@@ -78,11 +79,12 @@ const ListFinances: React.FC = () => {
 
           return {
             finances: {
-              ...previousResult.finances.nodes,
+              ...previousResult.finances,
               nodes: [
                 ...previousResult.finances.nodes,
                 ...fetchMoreResult.finances.nodes,
               ],
+              pageInfo: fetchMoreResult.finances.pageInfo,
             },
           }
         },
@@ -308,12 +310,14 @@ const ListFinances: React.FC = () => {
         })}
       </InfiniteScroll>
       <PlusButton onOpen={onOpen} setEdit={setIsEditform} />
-      <FinancesModal
-        isOpen={isOpen}
-        onClose={onClose}
-        intitialValues={initialValues}
-        isEditForm={isEditForm}
-      />
+      {isOpen && (
+        <FinancesModal
+          isOpen={isOpen}
+          onClose={onClose}
+          intitialValues={initialValues}
+          isEditForm={isEditForm}
+        />
+      )}
     </>
   )
 }

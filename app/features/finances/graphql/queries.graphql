@@ -1,4 +1,4 @@
-query getFinances($nameOrEmail: String, $offset: Int) {
+query getFinances($nameOrEmail: String, $limit: Int = 9999, $offset: Int) {
   finances(
     filter: {
       or: [
@@ -6,8 +6,8 @@ query getFinances($nameOrEmail: String, $offset: Int) {
         { supplierAndCustomer: { email: { iLike: $nameOrEmail } } }
       ]
     }
-    paging: { limit: 10, offset: $offset }
-  
+    paging: { limit: $limit, offset: $offset }
+    sorting: {field: dueDate, direction: DESC}
   )  {
     nodes {
       id
@@ -35,7 +35,7 @@ query getFinances($nameOrEmail: String, $offset: Int) {
         phone
       }
     }
-       pageInfo {
+    pageInfo {
       hasNextPage
       hasPreviousPage
     }

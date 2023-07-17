@@ -5,6 +5,7 @@ import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type GetFinancesQueryVariables = Types.Exact<{
   nameOrEmail?: Types.InputMaybe<Types.Scalars['String']>;
+  limit?: Types.InputMaybe<Types.Scalars['Int']>;
   offset?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
@@ -22,10 +23,11 @@ export type GetFinancesForDarshboardQuery = { __typename?: 'Query', finances: { 
 
 
 export const GetFinancesDocument = gql`
-    query getFinances($nameOrEmail: String, $offset: Int) {
+    query getFinances($nameOrEmail: String, $limit: Int = 9999, $offset: Int) {
   finances(
     filter: {or: [{supplierAndCustomer: {name: {iLike: $nameOrEmail}}}, {supplierAndCustomer: {email: {iLike: $nameOrEmail}}}]}
-    paging: {limit: 10, offset: $offset}
+    paging: {limit: $limit, offset: $offset}
+    sorting: {field: dueDate, direction: DESC}
   ) {
     nodes {
       id
@@ -74,6 +76,7 @@ export const GetFinancesDocument = gql`
  * const { data, loading, error } = useGetFinancesQuery({
  *   variables: {
  *      nameOrEmail: // value for 'nameOrEmail'
+ *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },
  * });

@@ -43,7 +43,7 @@
 # }
 
 
-query getSuppliersAndCustomers($namOrEmail: String, $offset:Int) {
+query getSuppliersAndCustomers($namOrEmail: String, $limit: Int = 9999,  $offset: Int) {
   suppliersAndCustomers(
      filter: {
       or: [
@@ -51,7 +51,8 @@ query getSuppliersAndCustomers($namOrEmail: String, $offset:Int) {
         { email: { iLike: $namOrEmail } }
       ]
     }
-    paging: {limit:10 ,offset:$offset}
+    paging: {limit: $limit ,offset: $offset}
+    sorting: {field: name, direction: ASC}
   ) {
     nodes {
       id

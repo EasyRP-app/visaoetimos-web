@@ -5,6 +5,7 @@ import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type GetAccountPlansQueryVariables = Types.Exact<{
   name?: Types.InputMaybe<Types.Scalars['String']>;
+  limit?: Types.InputMaybe<Types.Scalars['Int']>;
   offset?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
@@ -13,10 +14,11 @@ export type GetAccountPlansQuery = { __typename?: 'Query', accountPlans: { __typ
 
 
 export const GetAccountPlansDocument = gql`
-    query getAccountPlans($name: String, $offset: Int) {
+    query getAccountPlans($name: String, $limit: Int = 9999, $offset: Int) {
   accountPlans(
     filter: {or: [{name: {iLike: $name}}]}
-    paging: {limit: 10, offset: $offset}
+    paging: {limit: $limit, offset: $offset}
+    sorting: {field: name, direction: ASC}
   ) {
     nodes {
       id
@@ -45,6 +47,7 @@ export const GetAccountPlansDocument = gql`
  * const { data, loading, error } = useGetAccountPlansQuery({
  *   variables: {
  *      name: // value for 'name'
+ *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },
  * });

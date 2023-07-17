@@ -5,6 +5,7 @@ import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type GetSuppliersAndCustomersQueryVariables = Types.Exact<{
   namOrEmail?: Types.InputMaybe<Types.Scalars['String']>;
+  limit?: Types.InputMaybe<Types.Scalars['Int']>;
   offset?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
@@ -13,10 +14,11 @@ export type GetSuppliersAndCustomersQuery = { __typename?: 'Query', suppliersAnd
 
 
 export const GetSuppliersAndCustomersDocument = gql`
-    query getSuppliersAndCustomers($namOrEmail: String, $offset: Int) {
+    query getSuppliersAndCustomers($namOrEmail: String, $limit: Int = 9999, $offset: Int) {
   suppliersAndCustomers(
     filter: {or: [{name: {iLike: $namOrEmail}}, {email: {iLike: $namOrEmail}}]}
-    paging: {limit: 10, offset: $offset}
+    paging: {limit: $limit, offset: $offset}
+    sorting: {field: name, direction: ASC}
   ) {
     nodes {
       id
@@ -49,6 +51,7 @@ export const GetSuppliersAndCustomersDocument = gql`
  * const { data, loading, error } = useGetSuppliersAndCustomersQuery({
  *   variables: {
  *      namOrEmail: // value for 'namOrEmail'
+ *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },
  * });

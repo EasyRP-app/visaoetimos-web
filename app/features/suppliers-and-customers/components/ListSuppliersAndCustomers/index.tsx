@@ -36,12 +36,13 @@ const ListSupplyAndCustomer: React.FC = () => {
 
   const { data, loading, fetchMore } =
     useGetSuppliersAndCustomersQuery({
-      variables: { namOrEmail: `%${search}%` ?? `%%` },
+      variables: { namOrEmail: `%${search}%` ?? `%%`, limit: 10 },
     })
 
   const loadMore = async () => {
     const variables = {
       offset: data?.suppliersAndCustomers?.nodes.length,
+      limit: 10,
       namOrEmail: `%${search}%` ?? `%%`,
     }
 
@@ -58,6 +59,8 @@ const ListSupplyAndCustomer: React.FC = () => {
                 ...previousResult.suppliersAndCustomers.nodes,
                 ...fetchMoreResult.suppliersAndCustomers.nodes,
               ],
+              pageInfo:
+                fetchMoreResult.suppliersAndCustomers.pageInfo,
             },
           }
         },
@@ -213,12 +216,14 @@ const ListSupplyAndCustomer: React.FC = () => {
         ))}
       </InfiniteScroll>
       <PlusButton onOpen={onOpen} setEdit={setIsEditform} />
-      <SuppliersAndCustomersDrawer
-        intitialValues={initialValues}
-        isEditForm={isEditForm}
-        isOpen={isOpen}
-        onClose={onClose}
-      ></SuppliersAndCustomersDrawer>
+      {isOpen && (
+        <SuppliersAndCustomersDrawer
+          intitialValues={initialValues}
+          isEditForm={isEditForm}
+          isOpen={isOpen}
+          onClose={onClose}
+        />
+      )}
     </>
   )
 }
