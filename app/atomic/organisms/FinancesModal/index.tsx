@@ -31,10 +31,10 @@ export const FinancesModal: React.FC<FinancesModalProps> = ({
   const { updateOneFiance } = useUpdateOneFinance()
   const { data: suppliersAndCustomersData } =
     useGetSuppliersAndCustomersQuery({
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy: 'no-cache',
     })
   const { data: accountPlanData } = useGetAccountPlansQuery({
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'no-cache',
   })
 
   const suppliersAndCustomers =
