@@ -30,8 +30,12 @@ export const FinancesModal: React.FC<FinancesModalProps> = ({
   const { CreateOneFinance } = useCreateOneFinance()
   const { updateOneFiance } = useUpdateOneFinance()
   const { data: suppliersAndCustomersData } =
-    useGetSuppliersAndCustomersQuery()
-  const { data: accountPlanData } = useGetAccountPlansQuery()
+    useGetSuppliersAndCustomersQuery({
+      fetchPolicy: 'cache-and-network',
+    })
+  const { data: accountPlanData } = useGetAccountPlansQuery({
+    fetchPolicy: 'cache-and-network',
+  })
 
   const suppliersAndCustomers =
     suppliersAndCustomersData?.suppliersAndCustomers?.nodes
