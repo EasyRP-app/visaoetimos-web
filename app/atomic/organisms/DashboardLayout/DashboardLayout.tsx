@@ -42,7 +42,7 @@ const DashboardLayout = () => {
           queryData={handleFinanceData(financeGraphData)}
           title="Finanças por tipo"
         ></FinanceGraph>
-        <CashFlowGraph></CashFlowGraph>
+        <CashFlowGraph title="Fluxo de caixa"></CashFlowGraph>
 
         <FinanceBySupplier
           isLoading={isFinanceLoading}
